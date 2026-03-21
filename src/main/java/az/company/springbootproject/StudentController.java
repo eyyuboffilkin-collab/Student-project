@@ -45,5 +45,4 @@ public class StudentController {
         }
 
 }
->>>>>>> 905084f (Student Hub)
 }
