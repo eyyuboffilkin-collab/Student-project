@@ -1,0 +1,76 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 905084f (Student Hub)
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+<<<<<<< HEAD
+=======
+### IntelliJ IDEA ###
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+.kotlin
+
+### Eclipse ###
+>>>>>>> 50b4832 (BankAccount)
+=======
+>>>>>>> 905084f (Student Hub)
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 905084f (Student Hub)
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+<<<<<<< HEAD
+=======
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+>>>>>>> 50b4832 (BankAccount)
+=======
+>>>>>>> 905084f (Student Hub)
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 905084f (Student Hub)
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+<<<<<<< HEAD
+=======
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+>>>>>>> 50b4832 (BankAccount)
+=======
+>>>>>>> 905084f (Student Hub)
