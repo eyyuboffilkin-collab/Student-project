@@ -1,46 +1,48 @@
 package az.company.springbootproject;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/students")
-@CrossOrigin(origins = "*") //frontend 
+@RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public class StudentController {
-        @Autowired
-        private StudentRepository studentRepository;
-        private final StudentService service;
 
-        public StudentController(StudentService service) {
-            this.service = service;
-        }
+    @Autowired
+    private StudentService service;
 
-        @GetMapping("/all")
-        public List<Student> getAllStudents(){
-            return service.getAll();
-        }
-        @PostMapping("/add")
-        public Student addStudent(@RequestBody Student student){
-            return service.addStudent(student);
+    @Autowired
+    private StudentRepository studentRepository;
 
-        }
-        @GetMapping("/search")
-        public List<Student> search(@RequestParam String query){
-            return service.searchStudents(query);
-        }
+    @PostMapping("/csv/upload")
+    public ResponseEntity<String> uploadCsv(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty())
+            return ResponseEntity.badRequest().body("File is empty!");
 
-        @DeleteMapping("/delete/{id}")
-        public ResponseEntity<?> deleteStudent(@PathVariable Long id) {
-            if (studentRepository.existsById(id)) {
-                studentRepository.deleteById(id);
-                return ResponseEntity.ok().build();
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+        String filename = file.getOriginalFilename();
+        if (filename == null || !filename.toLowerCase().endsWith(".csv"))
+            return ResponseEntity.badRequest().body("Only CSV files are allowed!");
 
-        }
+        return ResponseEntity.ok(service.processCsv(file));
     }
+
+    @GetMapping("/students")
+    public ResponseEntity<List<Student>> getAllStudents() {
+        return ResponseEntity.ok(studentRepository.findAll());
+    }
+
+    @PostMapping("/students")
+    public ResponseEntity<Student> addStudent(@RequestBody Student student) {
+        return ResponseEntity.ok(studentRepository.save(student));
+    }
+
+    @DeleteMapping("/students/{id}")
+    public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
+        studentRepository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
+}

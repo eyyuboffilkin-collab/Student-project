@@ -1,30 +1,50 @@
 package az.company.springbootproject;
 
+import com.opencsv.CSVReader;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class StudentService {
-    private final StudentRepository repo;
+    @Autowired
+    private StudentRepository studentRepository;
 
-    public StudentService(StudentRepository repo) {
-        this.repo = repo;
+    public String processCsv(MultipartFile file){
+        List<Student>list = new ArrayList<>();
+
+        try(CSVReader reader = new CSVReader(new InputStreamReader(file.getInputStream()))){
+        String[] line;
+        boolean isHeader = true;
+
+        while((line = reader.readNext()) != null){
+            if(line.length == 0) continue;
+
+            if(isHeader){
+                isHeader = false;
+                continue;
+            }
+
+            if(line.length < 3) continue;
+            Student student = new Student();
+            student.setFirstName(line[0].trim());
+            student.setLastName(line[1].trim());
+            student.setStudentNumber(line[2].trim());
+
+            list.add(student);
+        }
+
+        studentRepository.saveAll(list);
+        return list.size() + " students were successfully added to the DB";
+        }catch (Exception e){
+            return "Error: " + e.getMessage();
+        }
     }
 
-    public List<Student> getAll(){
-        return repo.findAll();
-    }
-    public Student addStudent(Student student){
-        return repo.save(student);
-    }
-    public List<Student>searchStudents(String query){
-        return repo.findAll().stream()
-                .filter(s-> s.getFirstName().toLowerCase().contains(query.toLowerCase())
-                || s.getLastName().toLowerCase().contains(query.toLowerCase())
-                || s.getStudentNumber().toLowerCase().contains(query.toLowerCase())
-                || s.getId().toString().contains(query))
-                .toList();
 
-    }
+
 }
