@@ -14,37 +14,36 @@ public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
 
-    public String processCsv(MultipartFile file){
-        List<Student>list = new ArrayList<>();
+    public String processCsv(MultipartFile file) {
+        List<Student> list = new ArrayList<>();
 
-        try(CSVReader reader = new CSVReader(new InputStreamReader(file.getInputStream()))){
-        String[] line;
-        boolean isHeader = true;
+        try (CSVReader reader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
+            String[] line;
+            boolean isHeader = true;
 
-        while((line = reader.readNext()) != null){
-            if(line.length == 0) continue;
+            while ((line = reader.readNext()) != null) {
+                if (line.length == 0) continue;
 
-            if(isHeader){
-                isHeader = false;
-                continue;
+                if (isHeader) {
+                    isHeader = false;
+                    continue;
+                }
+
+                if (line.length < 3) continue;
+                Student student = new Student();
+                student.setFirstName(line[0].trim());
+                student.setLastName(line[1].trim());
+                student.setStudentNumber(line[2].trim());
+
+                list.add(student);
             }
 
-            if(line.length < 3) continue;
-            Student student = new Student();
-            student.setFirstName(line[0].trim());
-            student.setLastName(line[1].trim());
-            student.setStudentNumber(line[2].trim());
-
-            list.add(student);
-        }
-
-        studentRepository.saveAll(list);
-        return list.size() + " students were successfully added to the DB";
-        }catch (Exception e){
+            studentRepository.saveAll(list);
+            return list.size() + " students were successfully added to the DB";
+        } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
     }
-
 
 
 }
